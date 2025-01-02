@@ -1,6 +1,22 @@
 # Advent of Code 2024
 
-My solutions for [Advent of Code 2024](https://adventofcode.com/2024).
+Hi there! 👋 This is my attempt at solving the [Advent of Code 2024](https://adventofcode.com/2024) puzzles. I'm using Python this year because I think it provides enough functionality to solve the puzzles without getting too complex.
+
+I've set up this repository to keep track of my solutions and make it easy to start each new day's challenge. The structure might seem a bit over-engineered, but it helps me focus on solving the puzzles rather than dealing with boilerplate code every day.
+
+## Creating New Days
+
+```bash
+# Initialize a new day (creates directory and template files)
+./advent init day04    # Format: dayXX
+# or
+./advent init 4       # Just the number works too
+```
+
+This will create:
+- `dayXX/solution.py` with template code
+- `dayXX/input.txt` for puzzle input
+- `dayXX/test_input.txt` for example input
 
 ## Running Solutions
 
