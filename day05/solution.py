@@ -1,21 +1,11 @@
 import os, sys
+from collections import defaultdict
+
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from common.utils import run_solution
 
-
-def middle_page(data: str) -> int:
-    rules = data.split(',')
-    return int(rules[len(rules) // 2])
-
-
-def check_update_order(data: str) -> int:
-
-    return middle_page(data)
-
-
-def solve_part1(data: str) -> int:
+def parse_input(data: str):
     lines = data.split('\n')
-
     ordering_rules = []
     page_updates = []
     found_separator = False
@@ -28,12 +18,39 @@ def solve_part1(data: str) -> int:
         else:
             page_updates.append(line)
 
-    print(ordering_rules)
-    print(page_updates)
+    return ordering_rules, page_updates
 
-    print(check_update_order(page_updates[0]))
+def build_graph(rules: list[str]):
+    graph = defaultdict(list)
+    for rule in rules:
+        x,y = map(int, rule.split('|'))
+        graph[x].append(y)
+    return graph
+
+def find_middle_page(update):
+    return int(update[len(update) // 2])
+
+
+def is_correct_order(update, rules):
+    index_map = {page: i for i, page in enumerate(update)}
+    for page in update:
+        for target in rules[page]:
+            if target in index_map and index_map[page] > index_map[target]:
+                return False
+    return True
+
+
+def solve_part1(data: str) -> int:
+    ordering_rules, updates = parse_input(data)
+    rules = build_graph(ordering_rules)
     
-    return 0
+    totalsum = 0
+    for update in updates:
+        update = list(map(int, update.split(',')))
+        if is_correct_order(update, rules):
+            totalsum += find_middle_page(update)
+    
+    return totalsum
 
 def solve_part2(data: str) -> int:
     lines = data.split('\n')
