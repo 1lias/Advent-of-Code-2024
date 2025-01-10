@@ -1,4 +1,4 @@
-import os, sys, time
+import os, sys
 from collections import defaultdict
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
@@ -62,7 +62,6 @@ def resolve_order(update,rules):
     return sorted_update
 
 def solve_part2(data: str) -> int:
-    start_time = time.time()
     ordering_rules, updates = parse_input(data)
     rules = build_graph(ordering_rules)
 
@@ -72,9 +71,6 @@ def solve_part2(data: str) -> int:
         if not is_correct_order(update, rules):
             ordered_update = resolve_order(update,rules)
             totalsum += find_middle_page(ordered_update)
-
-    end_time = time.time()
-    print(end_time - start_time)
 
     return totalsum
 
