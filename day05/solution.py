@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, time
 from collections import defaultdict
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
@@ -39,7 +39,6 @@ def is_correct_order(update, rules):
                 return False
     return True
 
-
 def solve_part1(data: str) -> int:
     ordering_rules, updates = parse_input(data)
     rules = build_graph(ordering_rules)
@@ -52,9 +51,32 @@ def solve_part1(data: str) -> int:
     
     return totalsum
 
+def resolve_order(update,rules):
+    sorted_update = update[:]
+
+    for i in range(len(update)):
+        for j in range(0, len(update)-i-1): # adding -i in order to not check any of the items more than needed.
+            if sorted_update[j] in rules and sorted_update[j+1] in rules[sorted_update[j]]:
+                sorted_update[j], sorted_update[j+1] = sorted_update[j+1], sorted_update[j]
+
+    return sorted_update
+
 def solve_part2(data: str) -> int:
-    lines = data.split('\n')
-    return 0
+    start_time = time.time()
+    ordering_rules, updates = parse_input(data)
+    rules = build_graph(ordering_rules)
+
+    totalsum = 0
+    for update in updates:
+        update = list(map(int, update.split(',')))
+        if not is_correct_order(update, rules):
+            ordered_update = resolve_order(update,rules)
+            totalsum += find_middle_page(ordered_update)
+
+    end_time = time.time()
+    print(end_time - start_time)
+
+    return totalsum
 
 if __name__ == '__main__':
     run_solution(
@@ -62,5 +84,5 @@ if __name__ == '__main__':
         solve_part1=solve_part1,
         solve_part2=solve_part2,
         expected_part1=143,  # Example answer
-        expected_part2=0   # Example answer
+        expected_part2=123   # Example answer
     )
